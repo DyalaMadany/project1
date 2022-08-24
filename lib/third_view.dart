@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project1/products.dart';
-
 
 /*final Product= FutureProvider.autoDispose<List<Products>>((ref) async {
 http.Response response = await http
@@ -16,63 +15,66 @@ return json.map((data) => Products.fromMap(data)).toList();
   throw 'Something went wrong!';
 }
 });*/
-final product=ChangeNotifierProvider<items>((ref)=>items());
-class items extends ChangeNotifier{
-  List<Products>listProducts=[];
-  get item{
+final productsProvider = ChangeNotifierProvider<ProductsListChangeNotifier>((ref) => ProductsListChangeNotifier());
+
+class ProductsListChangeNotifier extends ChangeNotifier {
+  List<Product> products = [];
+
+  ProductsListChangeNotifier() {
     getData();
   }
-  Future getData()async{
-    listProducts=[];
-    http.Response response= await http.get(Uri.parse('https://fakestoreapi.com/products'));
-    var data = jsonDecode(response.body);
-    for(int i=0;i < response.body.length; i++){
 
-      listProducts.add(Products.fromMap(item));
-    }
-    print(listProducts.length);
+  Future getData() async {
+    products = [];
+    http.Response response =
+        await http.get(Uri.parse('https://fakestoreapi.com/products'));
+    final data = jsonDecode(response.body);
+    products =
+        data!.map<Product>((product) => Product.fromMap(product)).toList();
     notifyListeners();
   }
 }
 
-class ThirdView extends ConsumerWidget {
-  const ThirdView({Key? key}) : super(key: key);
+class ProductListView extends ConsumerWidget {
+  const ProductListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data =ref.watch(product);
+    final data = ref.watch(productsProvider);
     return Scaffold(
-      appBar: AppBar(title: Text('Fetch Data'),),
-      body: data.listProducts.isEmpty?
-          Center(
-            child: CircularProgressIndicator(),)
+      appBar: AppBar(
+        title: const Text('Fetch Data'),
+      ),
+      body: data.products.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
           : ListView.builder(
-          itemCount: data.listProducts.length,
-          itemBuilder: (context,index){
-            return Card(
-              child: ListTile(
-                title: Text(data.listProducts[index].title,
-                style: TextStyle(fontSize: 18),
-                ),
-                subtitle: Text(data.listProducts[index].toString(),
-                  style: TextStyle(fontSize: 16),
-                ),
-                leading: Container(
-                  alignment: Alignment.center,
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(20)
+              itemCount: data.products.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(
+                      data.products[index].title,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        data.products[index].price.toString() + '\$',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                    leading: Image.network(
+                      data.products[index].image,
+                      height: 50,
+                      width: 50,
+                    ),
                   ),
-                  child: Text(data.listProducts[index].id.toString(),
-                  ),
-                ),
-              ),
-            );
-      }),
-
-        );
-
+                );
+              }),
+    );
   }
 }
