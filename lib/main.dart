@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart'as http;
-import 'package:project1/second_view.dart';
-
+//import 'package:project1/second_view.dart';
+import 'package:project1/third_view.dart';
 final myProvider = Provider<String>((ref) {
   return 'name';
 });
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget{
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SecondView(),
+      home: const ThirdView(),
     );
   }
 }
