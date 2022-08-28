@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project1/productDetails.dart';
 import 'package:project1/products.dart';
 
 /*final Product= FutureProvider.autoDispose<List<Products>>((ref) async {
@@ -72,9 +73,18 @@ class ProductListView extends ConsumerWidget {
                       height: 50,
                       width: 50,
                     ),
-                  ),
-                );
-              }),
-    );
-  }
+                  onTap: ()=>_openProductDetails(
+                      context,
+                      data.products[index]
+                    )));
+                    }));
+                  }
+
+              }
+
+
+
+void _openProductDetails(BuildContext context,Product product){
+  Navigator.push(context,
+      MaterialPageRoute (builder: (context)=> ProductDetails(product: product )));
 }
