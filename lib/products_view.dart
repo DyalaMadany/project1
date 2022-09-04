@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project1/categories_grid_view.dart';
 import 'package:project1/productDetails.dart';
 import 'package:project1/product.dart';
 
 final productsListProvider =
-    FutureProvider.autoDispose<List<Product>>((ref) async {
+    FutureProvider.autoDispose.family<List<Product>,String>((ref,cat) async {
   http.Response response =
-      await http.get(Uri.parse('https://fakestoreapi.com/products'));
+      await http.get(Uri.parse('https://fakestoreapi.com/products/category/$cat'));
   final data = jsonDecode(response.body);
   return data!.map<Product>((product) => Product.fromMap(product)).toList();
 });
@@ -19,7 +20,8 @@ class ProductListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(productsListProvider);
+    final String cat = ref.watch(selectedCategoryProvider);
+    final state = ref.watch(productsListProvider(cat));
     return Scaffold(
         appBar: AppBar(
           title: const Text('Fetch Data'),

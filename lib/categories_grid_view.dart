@@ -8,8 +8,9 @@ final categoriesListProvider =
     FutureProvider.autoDispose<List<String>>((ref) async {
   http.Response response =
       await http.get(Uri.parse('https://fakestoreapi.com/products/categories'));
-  final data =  jsonDecode(response.body);
-  final categories = data.map<String>((category) => category.toString()).toList();
+  final data = jsonDecode(response.body);
+  final categories =
+      data.map<String>((category) => category.toString()).toList();
   return categories;
 });
 
@@ -37,7 +38,10 @@ class CategoriesGridView extends ConsumerWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ProductListView()));
+                                builder: (context) => ProviderScope(overrides: [
+                                      selectedCategoryProvider
+                                          .overrideWithValue(categories[index])
+                                    ], child: const ProductListView())));
                       },
                       child: Card(
                         child: Container(
@@ -58,3 +62,6 @@ class CategoriesGridView extends ConsumerWidget {
     );
   }
 }
+
+final selectedCategoryProvider =
+    Provider.autoDispose<String>((ref) => throw UnimplementedError());
