@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Hi Dyala',
       theme: ThemeData(
         // This is the theme of your application.
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget{
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const ProductListView(),
+      home: const ProductGridView(),
     );
   }
 }
