@@ -27,9 +27,12 @@ class CategoriesGridView extends ConsumerWidget {
       ),
       body: Center(
         child: Container(
+          padding: const EdgeInsets.all(20),
           child: ref.watch(categoriesListProvider).when(
                 data: (categories) => GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
                       crossAxisCount: 2),
                   itemCount: categories.length,
                   itemBuilder: (context, index) {
@@ -44,6 +47,7 @@ class CategoriesGridView extends ConsumerWidget {
                                     ], child: const ProductListView())));
                       },
                       child: Card(
+                        // margin: const EdgeInsets.all(20),
                         child: Container(
                           child: Text(categories[index]),
                           height: 200,
