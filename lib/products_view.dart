@@ -8,7 +8,7 @@ import 'package:project1/productDetails.dart';
 import 'package:project1/product.dart';
 
 final productsListProvider =
-    FutureProvider.autoDispose.family<List<Product>,String>((ref,cat) async {
+    FutureProvider.family<List<Product>,String>((ref,cat) async {
   http.Response response =
       await http.get(Uri.parse('https://fakestoreapi.com/products/category/$cat'));
   final data = jsonDecode(response.body);
