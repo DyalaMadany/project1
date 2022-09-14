@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart'as http;
+import 'package:project1/login.dart';
 //import 'package:project1/second_view.dart';
 import 'package:project1/products_view.dart';
-
+import 'package:project1/login.dart';
 import 'categories_grid_view.dart';
 final myProvider = Provider<String>((ref) {
   return 'name';
@@ -49,7 +50,10 @@ class MyApp extends StatelessWidget{
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const CategoriesGridView(),
+      //home: Login(),
+      routes: {
+        "login":(context)=> Login(username: '', onPressed: () {  },),
+      },
     );
   }
 }

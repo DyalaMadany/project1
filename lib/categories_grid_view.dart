@@ -27,28 +27,31 @@ class CategoriesGridView extends ConsumerWidget {
       ),
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(20),
           child: ref.watch(categoriesListProvider).when(
                 data: (categories) => GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
                       crossAxisCount: 2),
                   itemCount: categories.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProviderScope(overrides: [
-                                      selectedCategoryProvider
-                                          .overrideWithValue(categories[index])
-                                    ], child: const ProductListView())));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProviderScope(
+                              overrides: [
+                                selectedCategoryProvider.overrideWithValue(
+                                  categories[index],
+                                ),
+                              ],
+                              child: const ProductListView(),
+                            ),
+                          ),
+                        );
                       },
                       child: Card(
-                        // margin: const EdgeInsets.all(20),
                         child: Container(
+                          margin: EdgeInsets.all(10),
                           child: Text(categories[index]),
                           height: 200,
                           color: Colors.yellow,
@@ -68,4 +71,4 @@ class CategoriesGridView extends ConsumerWidget {
 }
 
 final selectedCategoryProvider =
-    Provider.autoDispose<String>((ref) => throw UnimplementedError());
+    Provider.autoDispose<String>((ref) => ref.state);
